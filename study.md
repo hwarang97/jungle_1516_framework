@@ -8,3 +8,6 @@
 
 ## 프레임워크 조사
 - [프레임워크 실사용 조사](https://app.notion.com/p/37bb3160e4c08051b87ef74a90527b51)
+
+## 프로젝트 설계
+- [시장분석](https://app.notion.com/p/37cb3160e4c0808d9700ddc22e329236)
