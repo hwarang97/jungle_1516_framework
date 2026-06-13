@@ -11,3 +11,4 @@
 
 ## 프로젝트 설계
 - [시장분석](https://app.notion.com/p/37cb3160e4c0808d9700ddc22e329236)
+- [프로젝트 설계](https://app.notion.com/p/37cb3160e4c080c68e4ce04edeb92c31)
