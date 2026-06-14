@@ -1,0 +1,231 @@
+.page {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 48px 0 72px;
+  color: #1f2937;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.header h1 {
+  margin-bottom: 10px;
+  color: #111827;
+  font-size: 34px;
+  line-height: 1.25;
+}
+
+.description {
+  color: #64748b;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.primaryLink,
+.searchButton {
+  border: 1px solid #111827;
+  border-radius: 6px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  height: 40px;
+  padding: 0 16px;
+}
+
+.searchPanel {
+  margin-bottom: 28px;
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.searchLabel {
+  display: block;
+  margin-bottom: 10px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.searchRow {
+  display: grid;
+  grid-template-columns: 1fr 88px;
+  gap: 10px;
+}
+
+.searchInput {
+  min-width: 0;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 15px;
+}
+
+.searchButton {
+  height: 42px;
+}
+
+.conditionList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.conditionChip,
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  border-radius: 999px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.conditionChip {
+  padding: 0 10px;
+  border: 1px solid #dbe3ef;
+  background: #ffffff;
+  color: #334155;
+}
+
+.tableSection {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tableHeader h2 {
+  color: #111827;
+  font-size: 18px;
+}
+
+.tableHeader p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th,
+.table td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #edf2f7;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.table tr:last-child td {
+  border-bottom: 0;
+}
+
+.productName {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.productName:hover {
+  text-decoration: underline;
+}
+
+.brand {
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.specStack {
+  display: grid;
+  gap: 4px;
+}
+
+.specStack span:last-child {
+  color: #64748b;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: 0 8px;
+  background: #eef2f7;
+  color: #475569;
+}
+
+@media (max-width: 720px) {
+  .page {
+    width: min(100% - 28px, 1180px);
+    padding-top: 28px;
+  }
+
+  .header,
+  .tableHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
+
+  .searchRow {
+    grid-template-columns: 1fr;
+  }
+
+  .searchButton {
+    width: 100%;
+  }
+}
