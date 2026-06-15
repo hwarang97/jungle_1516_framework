@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { SubmitEvent } from "react";
-import { useState } from "react";
 import styles from "./ProductForm.module.css";
 
 export type ProductFormValues = {
@@ -25,15 +25,22 @@ export type ProductFormValues = {
 type ProductFormProps = {
   mode: "create" | "edit";
   initialValues?: ProductFormValues;
+  redirectHref: string;
+  cancelHref?: string;
 };
 
-export default function ProductForm({ mode, initialValues }: ProductFormProps) {
-  const [message, setMessage] = useState("");
+export default function ProductForm({
+  mode,
+  initialValues,
+  redirectHref,
+  cancelHref = "/products",
+}: ProductFormProps) {
+  const router = useRouter();
   const submitLabel = mode === "create" ? "상품 등록" : "상품 수정";
 
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMessage(`${submitLabel} 입력값을 확인했습니다.`);
+    router.push(redirectHref);
   }
 
   return (
@@ -147,7 +154,7 @@ export default function ProductForm({ mode, initialValues }: ProductFormProps) {
       </section>
 
       <div className={styles.actions}>
-        <Link className={styles.secondaryLink} href="/products">
+        <Link className={styles.secondaryLink} href={cancelHref}>
           취소
         </Link>
         <button className={styles.primaryButton} type="submit">
@@ -155,7 +162,6 @@ export default function ProductForm({ mode, initialValues }: ProductFormProps) {
         </button>
       </div>
 
-      {message ? <p className={styles.message}>{message}</p> : null}
     </form>
   );
 }

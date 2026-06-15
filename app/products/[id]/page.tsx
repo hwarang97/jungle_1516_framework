@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import productsData from "@/data/products.json";
+import DeleteProductButton from "./DeleteProductButton";
 import styles from "./page.module.css";
 
 type Product = {
@@ -101,9 +102,15 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div className={styles.priceBox}>
           <span>현재 기준 가격</span>
           <strong>{numberFormat.format(product.priceKrw)}원</strong>
-          <a href={product.productUrl} target="_blank" rel="noreferrer">
-            원본 상품 페이지
-          </a>
+          <div className={styles.detailActions}>
+            <a className={styles.actionLink} href={product.productUrl} target="_blank" rel="noreferrer">
+              원본 상품 페이지
+            </a>
+            <Link className={styles.secondaryActionLink} href={`/products/${product.pcode}/edit`}>
+              수정
+            </Link>
+            <DeleteProductButton productName={product.name} />
+          </div>
         </div>
       </section>
 

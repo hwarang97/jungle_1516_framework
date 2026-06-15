@@ -10,7 +10,7 @@ export default function ProductNewPage() {
         <p>노트북 상품의 기본 정보와 주요 스펙을 입력합니다.</p>
       </section>
 
-      <ProductForm mode="create" />
+      <ProductForm mode="create" redirectHref="/products" />
     </main>
   );
 }

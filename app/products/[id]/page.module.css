@@ -69,18 +69,41 @@
   font-size: 25px;
 }
 
-.priceBox a {
+.detailActions {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.actionLink,
+.secondaryActionLink,
+.dangerButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 38px;
-  margin-top: 6px;
+  width: 100%;
   border: 1px solid #111827;
   border-radius: 6px;
-  background: #111827;
-  color: #ffffff;
   font-size: 14px;
   font-weight: 800;
+}
+
+.actionLink {
+  background: #111827;
+  color: #ffffff;
+}
+
+.secondaryActionLink {
+  background: #ffffff;
+  color: #111827;
+}
+
+.dangerButton {
+  border-color: #dc2626;
+  background: #ffffff;
+  color: #dc2626;
+  cursor: pointer;
 }
 
 .summaryGrid {

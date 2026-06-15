@@ -50,7 +50,12 @@ export default async function ProductEditPage({ params }: PageProps) {
         <p>{product.name}</p>
       </section>
 
-      <ProductForm mode="edit" initialValues={initialValues} />
+      <ProductForm
+        mode="edit"
+        initialValues={initialValues}
+        redirectHref={`/products/${product.pcode}`}
+        cancelHref={`/products/${product.pcode}`}
+      />
     </main>
   );
 }
