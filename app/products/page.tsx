@@ -103,12 +103,17 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           </div>
         </form>
         {searchKeywords.length > 0 ? (
-          <div className={styles.conditionList} aria-label="적용된 검색어">
-            {searchKeywords.map((keyword) => (
-              <span className={styles.conditionChip} key={keyword}>
-                {keyword}
-              </span>
-            ))}
+          <div className={styles.conditionBar}>
+            <div className={styles.conditionList} aria-label="적용된 검색어">
+              {searchKeywords.map((keyword) => (
+                <span className={styles.conditionChip} key={keyword}>
+                  {keyword}
+                </span>
+              ))}
+            </div>
+            <Link className={styles.clearSearchLink} href="/products">
+              초기화
+            </Link>
           </div>
         ) : null}
       </section>
