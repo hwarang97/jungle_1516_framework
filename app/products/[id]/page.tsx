@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import productsData from "@/data/products.json";
 import DeleteProductButton from "./DeleteProductButton";
@@ -9,6 +10,7 @@ type Product = {
   name: string;
   brand: string;
   priceKrw: number;
+  imageUrl: string;
   productUrl: string;
   cpu: string;
   gpu: string;
@@ -94,6 +96,15 @@ export default async function ProductDetailPage({ params }: PageProps) {
       </Link>
 
       <section className={styles.hero}>
+        <div className={styles.imagePanel}>
+          <Image
+            className={styles.productImage}
+            src={product.imageUrl}
+            alt={`${product.name} 대표 이미지`}
+            width={220}
+            height={220}
+          />
+        </div>
         <div>
           <p className={styles.brand}>{product.brand}</p>
           <h1>{product.name}</h1>

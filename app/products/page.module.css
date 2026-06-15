@@ -197,6 +197,23 @@
   border-bottom: 0;
 }
 
+.productCell {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-width: 260px;
+}
+
+.productImage {
+  width: 58px;
+  height: 58px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f8fafc;
+  object-fit: contain;
+}
+
 .productName {
   color: #0f172a;
   font-weight: 800;

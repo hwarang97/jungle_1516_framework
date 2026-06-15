@@ -19,10 +19,27 @@
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-columns: 260px minmax(0, 1fr) 280px;
   gap: 28px;
   align-items: stretch;
   margin-bottom: 24px;
+}
+
+.imagePanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.productImage {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
 }
 
 .brand {

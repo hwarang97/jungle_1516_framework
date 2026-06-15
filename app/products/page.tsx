@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import productsData from "@/data/products.json";
 import styles from "./page.module.css";
 
@@ -7,6 +8,7 @@ type Product = {
   name: string;
   brand: string;
   priceKrw: number;
+  imageUrl: string;
   cpu: string;
   gpu: string;
   ramGb: number;
@@ -145,11 +147,22 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               <tbody>
                 {visibleProducts.map((product) => (
                   <tr key={product.pcode}>
-                    <td>
-                      <Link className={styles.productName} href={`/products/${product.pcode}`}>
-                        {product.name}
-                      </Link>
-                      <p className={styles.brand}>{product.brand}</p>
+                  <td>
+                      <div className={styles.productCell}>
+                        <Image
+                          className={styles.productImage}
+                          src={product.imageUrl}
+                          alt={`${product.name} 대표 이미지`}
+                          width={58}
+                          height={58}
+                        />
+                        <div>
+                          <Link className={styles.productName} href={`/products/${product.pcode}`}>
+                            {product.name}
+                          </Link>
+                          <p className={styles.brand}>{product.brand}</p>
+                        </div>
+                      </div>
                     </td>
                     <td>{numberFormat.format(product.priceKrw)}원</td>
                     <td>
