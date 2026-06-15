@@ -29,7 +29,17 @@ const selectedConditions = [
 
 const numberFormat = new Intl.NumberFormat("ko-KR");
 
-export default function ProductsPage() {
+type ProductsPageProps = {
+  searchParams: Promise<{
+    q?: string;
+  }>;
+};
+
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const { q } = await searchParams;
+  const searchQuery =
+    q ?? "200만원 전후, 16인치, 가볍고 외부 모니터 연결이 가능한 노트북";
+
   return (
     <main className={styles.page}>
       <section className={styles.header}>
@@ -53,7 +63,7 @@ export default function ProductsPage() {
           <input
             id="product-search"
             className={styles.searchInput}
-            defaultValue="200만원 전후, 16인치, 가볍고 외부 모니터 연결이 가능한 노트북"
+            defaultValue={searchQuery}
           />
           <button className={styles.searchButton} type="button">
             검색

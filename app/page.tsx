@@ -13,9 +13,24 @@ const examples = [
 export default function HomePage() {
   const router = useRouter();
 
+  function moveToProducts(query: string) {
+    const trimmedQuery = query.trim();
+
+    if (!trimmedQuery) {
+      router.push("/products");
+      return;
+    }
+
+    const params = new URLSearchParams({ q: trimmedQuery });
+    router.push(`/products?${params.toString()}`);
+  }
+
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    router.push("/products");
+
+    const formData = new FormData(event.currentTarget);
+    const query = String(formData.get("query") ?? "");
+    moveToProducts(query);
   }
 
   return (
@@ -50,7 +65,7 @@ export default function HomePage() {
               className={styles.exampleButton}
               key={example}
               type="button"
-              onClick={() => router.push("/products")}
+              onClick={() => moveToProducts(example)}
             >
               {example}
             </button>
