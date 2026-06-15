@@ -55,7 +55,12 @@ function filterProducts(query: string) {
     return products;
   }
 
-  return products.filter((product) => createSearchText(product).includes(trimmedQuery));
+  const keywords = trimmedQuery.split(/\s+/);
+
+  return products.filter((product) => {
+    const searchText = createSearchText(product);
+    return keywords.every((keyword) => searchText.includes(keyword));
+  });
 }
 
 type ProductsPageProps = {
