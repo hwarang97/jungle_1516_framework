@@ -22,15 +22,11 @@ type Product = {
 
 const products: Product[] = productsData;
 
-const selectedConditions = [
-  "200만원 전후",
-  "15~16인치",
-  "RAM 16GB 이상",
-  "SSD 512GB 이상",
-  "휴대성 고려",
-];
-
 const numberFormat = new Intl.NumberFormat("ko-KR");
+
+function getSearchKeywords(query: string) {
+  return query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+}
 
 function createSearchText(product: Product) {
   return [
@@ -49,13 +45,11 @@ function createSearchText(product: Product) {
 }
 
 function filterProducts(query: string) {
-  const trimmedQuery = query.trim().toLowerCase();
+  const keywords = getSearchKeywords(query);
 
-  if (!trimmedQuery) {
+  if (keywords.length === 0) {
     return products;
   }
-
-  const keywords = trimmedQuery.split(/\s+/);
 
   return products.filter((product) => {
     const searchText = createSearchText(product);
@@ -72,6 +66,7 @@ type ProductsPageProps = {
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const { q } = await searchParams;
   const searchQuery = q ?? "";
+  const searchKeywords = getSearchKeywords(searchQuery);
   const visibleProducts = filterProducts(searchQuery);
 
   return (
@@ -107,13 +102,15 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             </button>
           </div>
         </form>
-        <div className={styles.conditionList} aria-label="적용된 조건">
-          {selectedConditions.map((condition) => (
-            <span className={styles.conditionChip} key={condition}>
-              {condition}
-            </span>
-          ))}
-        </div>
+        {searchKeywords.length > 0 ? (
+          <div className={styles.conditionList} aria-label="적용된 검색어">
+            {searchKeywords.map((keyword) => (
+              <span className={styles.conditionChip} key={keyword}>
+                {keyword}
+              </span>
+            ))}
+          </div>
+        ) : null}
       </section>
 
       <section className={styles.tableSection} aria-label="상품 목록">
