@@ -56,19 +56,22 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       </section>
 
       <section className={styles.searchPanel} aria-label="검색 조건">
-        <label className={styles.searchLabel} htmlFor="product-search">
-          검색 문장
-        </label>
-        <div className={styles.searchRow}>
-          <input
-            id="product-search"
-            className={styles.searchInput}
-            defaultValue={searchQuery}
-          />
-          <button className={styles.searchButton} type="button">
-            검색
-          </button>
-        </div>
+        <form action="/products">
+          <label className={styles.searchLabel} htmlFor="product-search">
+            검색 문장
+          </label>
+          <div className={styles.searchRow}>
+            <input
+              id="product-search"
+              name="q"
+              className={styles.searchInput}
+              defaultValue={searchQuery}
+            />
+            <button className={styles.searchButton} type="submit">
+              검색
+            </button>
+          </div>
+        </form>
         <div className={styles.conditionList} aria-label="적용된 조건">
           {selectedConditions.map((condition) => (
             <span className={styles.conditionChip} key={condition}>
