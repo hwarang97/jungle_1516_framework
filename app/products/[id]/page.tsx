@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import productsData from "@/data/products.json";
+import CommentSection from "./CommentSection";
 import DeleteProductButton from "./DeleteProductButton";
 import styles from "./page.module.css";
 
@@ -172,6 +173,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
           <p className={styles.collectedAt}>수집일: {product.collectedAt}</p>
         </aside>
       </section>
+
+      <CommentSection />
     </main>
   );
 }

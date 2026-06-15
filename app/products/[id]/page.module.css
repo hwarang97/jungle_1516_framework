@@ -233,6 +233,110 @@
   font-size: 13px;
 }
 
+.commentSection {
+  margin-top: 18px;
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.commentHeader h2 {
+  color: #111827;
+  font-size: 19px;
+}
+
+.commentHeader span {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.commentForm {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.commentLabel {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.commentForm textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+  font: inherit;
+  line-height: 1.6;
+}
+
+.commentForm textarea:focus {
+  border-color: #111827;
+  outline: 2px solid #dbe3ef;
+}
+
+.commentForm button {
+  justify-self: end;
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid #111827;
+  border-radius: 6px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.commentList {
+  display: grid;
+  gap: 10px;
+}
+
+.commentItem {
+  padding: 16px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.commentMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.commentMeta strong {
+  color: #111827;
+  font-size: 14px;
+}
+
+.commentMeta span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.commentItem p {
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 @media (max-width: 860px) {
   .page {
     width: min(100% - 28px, 1120px);
@@ -252,5 +356,9 @@
 
   .specList div {
     grid-template-columns: 88px 1fr;
+  }
+
+  .commentForm button {
+    width: 100%;
   }
 }
