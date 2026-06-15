@@ -42,6 +42,74 @@ a {
   text-decoration: none;
 }
 
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 64px;
+  padding: 0 32px;
+  border-bottom: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+}
+
+.site-brand {
+  color: #111827;
+  font-size: 16px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: 6px;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.site-nav a:hover {
+  background: #f1f5f9;
+  color: #111827;
+}
+
+.site-nav a.site-nav-primary {
+  border: 1px solid #111827;
+  background: #111827;
+  color: #ffffff;
+}
+
+.site-nav a.site-nav-primary:hover {
+  background: #1f2937;
+}
+
+@media (max-width: 720px) {
+  .site-header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 14px;
+  }
+
+  .site-nav {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
