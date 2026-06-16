@@ -6,9 +6,11 @@ import type { SubmitEvent } from "react";
 import styles from "./ProductForm.module.css";
 
 export type ProductFormValues = {
+  pcode?: string;
   name?: string;
   brand?: string;
   priceKrw?: number;
+  imageUrl?: string;
   productUrl?: string;
   cpu?: string;
   gpu?: string;
@@ -25,6 +27,7 @@ export type ProductFormValues = {
 type ProductFormProps = {
   mode: "create" | "edit";
   initialValues?: ProductFormValues;
+  submitAction?: (formData: FormData) => void | Promise<void>;
   redirectHref: string;
   cancelHref?: string;
 };
@@ -32,6 +35,7 @@ type ProductFormProps = {
 export default function ProductForm({
   mode,
   initialValues,
+  submitAction,
   redirectHref,
   cancelHref = "/products",
 }: ProductFormProps) {
@@ -44,10 +48,22 @@ export default function ProductForm({
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form
+      className={styles.form}
+      action={submitAction}
+      onSubmit={submitAction ? undefined : handleSubmit}
+    >
       <section className={styles.section}>
         <h2>기본 정보</h2>
         <div className={styles.grid}>
+          <label className={styles.field}>
+            상품 코드
+            <input
+              name="pcode"
+              placeholder="비워두면 자동 생성"
+              defaultValue={initialValues?.pcode ?? ""}
+            />
+          </label>
           <label className={styles.field}>
             상품명
             <input name="name" required defaultValue={initialValues?.name ?? ""} />
@@ -69,6 +85,15 @@ export default function ProductForm({
           <label className={styles.field}>
             OS
             <input name="os" required defaultValue={initialValues?.os ?? ""} />
+          </label>
+          <label className={styles.field}>
+            상품 이미지 URL
+            <input
+              name="imageUrl"
+              type="url"
+              required
+              defaultValue={initialValues?.imageUrl ?? ""}
+            />
           </label>
         </div>
       </section>
@@ -133,7 +158,11 @@ export default function ProductForm({
         <h2>설명과 태그</h2>
         <label className={styles.field}>
           태그
-          <input name="tags" defaultValue={initialValues?.tags ?? ""} />
+          <input
+            name="tags"
+            placeholder="예: 게임용, 프리도스, RTX"
+            defaultValue={initialValues?.tags ?? ""}
+          />
         </label>
         <label className={styles.field}>
           한 줄 설명
@@ -145,7 +174,12 @@ export default function ProductForm({
         </label>
         <label className={styles.field}>
           원본 상품 URL
-          <input name="productUrl" type="url" defaultValue={initialValues?.productUrl ?? ""} />
+          <input
+            name="productUrl"
+            type="url"
+            required
+            defaultValue={initialValues?.productUrl ?? ""}
+          />
         </label>
         <label className={styles.field}>
           원본 스펙
@@ -161,7 +195,6 @@ export default function ProductForm({
           {submitLabel}
         </button>
       </div>
-
     </form>
   );
 }

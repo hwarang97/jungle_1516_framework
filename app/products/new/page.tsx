@@ -1,4 +1,5 @@
 import ProductForm from "../ProductForm";
+import { createProduct } from "../actions";
 import styles from "./page.module.css";
 
 export default function ProductNewPage() {
@@ -10,7 +11,7 @@ export default function ProductNewPage() {
         <p>노트북 상품의 기본 정보와 주요 스펙을 입력합니다.</p>
       </section>
 
-      <ProductForm mode="create" redirectHref="/products" />
+      <ProductForm mode="create" submitAction={createProduct} redirectHref="/products" />
     </main>
   );
 }
