@@ -1,6 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import productsData from "@/data/products.json";
+import CommentSection from "./CommentSection";
+import DeleteProductButton from "./DeleteProductButton";
 import styles from "./page.module.css";
 
 type Product = {
@@ -8,6 +11,7 @@ type Product = {
   name: string;
   brand: string;
   priceKrw: number;
+  imageUrl: string;
   productUrl: string;
   cpu: string;
   gpu: string;
@@ -93,6 +97,15 @@ export default async function ProductDetailPage({ params }: PageProps) {
       </Link>
 
       <section className={styles.hero}>
+        <div className={styles.imagePanel}>
+          <Image
+            className={styles.productImage}
+            src={product.imageUrl}
+            alt={`${product.name} 대표 이미지`}
+            width={220}
+            height={220}
+          />
+        </div>
         <div>
           <p className={styles.brand}>{product.brand}</p>
           <h1>{product.name}</h1>
@@ -101,9 +114,15 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div className={styles.priceBox}>
           <span>현재 기준 가격</span>
           <strong>{numberFormat.format(product.priceKrw)}원</strong>
-          <a href={product.productUrl} target="_blank" rel="noreferrer">
-            원본 상품 페이지
-          </a>
+          <div className={styles.detailActions}>
+            <a className={styles.actionLink} href={product.productUrl} target="_blank" rel="noreferrer">
+              원본 상품 페이지
+            </a>
+            <Link className={styles.secondaryActionLink} href={`/products/${product.pcode}/edit`}>
+              수정
+            </Link>
+            <DeleteProductButton productName={product.name} />
+          </div>
         </div>
       </section>
 
@@ -154,6 +173,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
           <p className={styles.collectedAt}>수집일: {product.collectedAt}</p>
         </aside>
       </section>
+
+      <CommentSection />
     </main>
   );
 }

@@ -1,142 +1,137 @@
 .page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
   display: flex;
-  flex: 1;
-  flex-direction: column;
+  min-height: 100vh;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
+  padding: 48px 24px;
+  color: #1f2937;
+  background: #ffffff;
 }
 
-.main {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
+.hero {
+  width: min(760px, 100%);
+  text-align: center;
 }
 
-.intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
-}
-
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
-}
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
+.eyebrow {
+  margin-bottom: 14px;
+  color: #64748b;
   font-size: 14px;
+  font-weight: 800;
 }
 
-.ctas a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
+.hero h1 {
+  margin-bottom: 16px;
+  color: #0f172a;
+  font-size: 42px;
+  line-height: 1.25;
+}
+
+.description {
+  width: min(620px, 100%);
+  margin: 0 auto 30px;
+  color: #64748b;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.searchBox {
+  margin-bottom: 16px;
+}
+
+.searchLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.searchRow {
+  display: grid;
+  grid-template-columns: 1fr 92px;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.searchInput {
+  min-width: 0;
+  height: 48px;
+  border: 0;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 16px;
   padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
+}
+
+.searchInput:focus {
+  outline: 2px solid #cbd5e1;
+}
+
+.searchButton {
+  height: 48px;
+  border: 1px solid #111827;
+  border-radius: 6px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
   cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
+  margin-bottom: 22px;
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+.exampleButton {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid #dbe3ef;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
+.exampleButton:hover {
+  border-color: #94a3b8;
+  color: #111827;
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
+.listLink {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 800;
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
+.listLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .hero h1 {
+    font-size: 30px;
   }
 
-  .page {
-    --background: #000;
-    --foreground: #000;
+  .description {
+    font-size: 15px;
+  }
 
-    --text-primary: #ededed;
-    --text-secondary: #999;
+  .searchRow {
+    grid-template-columns: 1fr;
+  }
 
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  .searchButton {
+    width: 100%;
   }
 }

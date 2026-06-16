@@ -1,8 +1,16 @@
+import ProductForm from "../ProductForm";
+import styles from "./page.module.css";
+
 export default function ProductNewPage() {
   return (
-    <main>
-      <h1>상품 등록 페이지</h1>
-      <p>새 노트북 상품 정보를 등록하는 화면입니다.</p>
+    <main className={styles.page}>
+      <section className={styles.header}>
+        <p className={styles.eyebrow}>상품 관리</p>
+        <h1>상품 등록</h1>
+        <p>노트북 상품의 기본 정보와 주요 스펙을 입력합니다.</p>
+      </section>
+
+      <ProductForm mode="create" redirectHref="/products" />
     </main>
   );
 }
