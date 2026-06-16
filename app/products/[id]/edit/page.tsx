@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import ProductForm, { ProductFormValues } from "../../ProductForm";
 import { getProductByPcode } from "@/lib/products";
+import { updateProduct } from "../../actions";
 import styles from "./page.module.css";
 
 type PageProps = {
@@ -21,6 +22,7 @@ export default async function ProductEditPage({ params }: PageProps) {
     ...product,
     tags: product.tags.join(", "),
   };
+  const updateProductAction = updateProduct.bind(null, product.pcode);
 
   return (
     <main className={styles.page}>
@@ -33,6 +35,7 @@ export default async function ProductEditPage({ params }: PageProps) {
       <ProductForm
         mode="edit"
         initialValues={initialValues}
+        submitAction={updateProductAction}
         redirectHref={`/products/${product.pcode}`}
         cancelHref={`/products/${product.pcode}`}
       />
