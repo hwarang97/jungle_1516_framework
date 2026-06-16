@@ -13,3 +13,6 @@
 - [시장분석](https://app.notion.com/p/37cb3160e4c0808d9700ddc22e329236)
 - [프로젝트 설계](https://app.notion.com/p/37cb3160e4c080c68e4ce04edeb92c31)
 - [와이어프레임](https://app.notion.com/p/37fb3160e4c08062af42f94fc0515842)
+
+## 개선사항
+- [검색속도개선](https://app.notion.com/p/381b3160e4c080ad8246cc11938d97bd)
