@@ -12,7 +12,7 @@ export default function DeleteProductButton({ productName }: DeleteProductButton
 
   function handleDelete() {
     const confirmed = window.confirm(
-      `${productName} 상품 삭제 흐름을 확인합니다. 현재는 DB 연결 전이라 실제 데이터는 삭제되지 않습니다.`,
+      `${productName} 상품 삭제 흐름을 확인합니다. 현재는 삭제 API가 없어 실제 데이터는 삭제되지 않습니다.`,
     );
 
     if (confirmed) {

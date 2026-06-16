@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  products     Product[]
+  comments     Comment[]
+}
+
+model Product {
+  id                   Int          @id @default(autoincrement())
+  pcode                String       @unique
+  name                 String
+  brand                String
+  priceKrw             Int
+  imageUrl             String
+  productUrl           String
+  source               String       @default("danawa")
+  category             String       @default("notebook")
+  cpu                  String
+  cpuBrand             String?
+  gpu                  String
+  gpuType              String?
+  npuTops              Int?
+  ramGb                Int
+  ramUpgradeable       Boolean?
+  storageGb            Int
+  storageSlotCount     Int?
+  displayInch          Float
+  displayCm            Float?
+  displayResolution    String?
+  displayRefreshHz     Int?
+  displayBrightnessNit Int?
+  weightKg             Float
+  os                   String
+  batteryWh            Float?
+  batteryMaxHours      Float?
+  power                String?
+  ports                String[]     @default([])
+  useCases             String[]     @default([])
+  description          String
+  rawSpec              String
+  collectedAt          String?
+  creatorId            Int?
+  creator              User?        @relation(fields: [creatorId], references: [id])
+  comments             Comment[]
+  productTags          ProductTag[]
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  @@index([brand])
+  @@index([priceKrw])
+  @@index([displayInch])
+  @@index([weightKg])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  authorId  Int?
+  author    User?    @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([authorId])
+}
+
+model Tag {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  createdAt   DateTime     @default(now())
+  productTags ProductTag[]
+}
+
+model ProductTag {
+  productId Int
+  tagId     Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([productId, tagId])
+  @@index([tagId])
+}

@@ -1,40 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import productsData from "@/data/products.json";
+import { getProductByPcode } from "@/lib/products";
 import CommentSection from "./CommentSection";
 import DeleteProductButton from "./DeleteProductButton";
 import styles from "./page.module.css";
-
-type Product = {
-  pcode: string;
-  name: string;
-  brand: string;
-  priceKrw: number;
-  imageUrl: string;
-  productUrl: string;
-  cpu: string;
-  gpu: string;
-  npuTops: number | null;
-  ramGb: number;
-  ramUpgradeable: boolean;
-  storageGb: number;
-  storageSlotCount: number | null;
-  displayInch: number;
-  displayResolution: string;
-  displayRefreshHz: number | null;
-  displayBrightnessNit: number | null;
-  weightKg: number;
-  os: string;
-  batteryWh: number | null;
-  batteryMaxHours: number | null;
-  power: string;
-  useCases: string[];
-  tags: string[];
-  description: string;
-  rawSpec: string;
-  collectedAt: string;
-};
 
 type PageProps = {
   params: Promise<{
@@ -42,15 +12,18 @@ type PageProps = {
   }>;
 };
 
-const products: Product[] = productsData;
 const numberFormat = new Intl.NumberFormat("ko-KR");
 
-function formatBoolean(value: boolean) {
+function formatBoolean(value: boolean | null) {
+  if (value === null) {
+    return "-";
+  }
+
   return value ? "가능" : "불가능";
 }
 
-function formatEmpty(value: string | number | null) {
-  if (value === null || value === "") {
+function formatEmpty(value: string | number | null | undefined) {
+  if (value === null || value === undefined || value === "") {
     return "-";
   }
 
@@ -59,7 +32,7 @@ function formatEmpty(value: string | number | null) {
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { id } = await params; // 요청 URL에 의존하는 변수임을 명시 (정적 페이지로 만들기 어렵다는 뜻, 캐싱 힘듬)
-  const product = products.find((item) => item.pcode === id);
+  const product = await getProductByPcode(id);
 
   if (!product) {
     notFound();

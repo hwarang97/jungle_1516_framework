@@ -1,25 +1,7 @@
 import { notFound } from "next/navigation";
 import ProductForm, { ProductFormValues } from "../../ProductForm";
-import productsData from "@/data/products.json";
+import { getProductByPcode } from "@/lib/products";
 import styles from "./page.module.css";
-
-type Product = {
-  pcode: string;
-  name: string;
-  brand: string;
-  priceKrw: number;
-  productUrl: string;
-  cpu: string;
-  gpu: string;
-  ramGb: number;
-  storageGb: number;
-  displayInch: number;
-  weightKg: number;
-  os: string;
-  tags: string[];
-  description: string;
-  rawSpec: string;
-};
 
 type PageProps = {
   params: Promise<{
@@ -27,11 +9,9 @@ type PageProps = {
   }>;
 };
 
-const products: Product[] = productsData;
-
 export default async function ProductEditPage({ params }: PageProps) {
   const { id } = await params;
-  const product = products.find((item) => item.pcode === id);
+  const product = await getProductByPcode(id);
 
   if (!product) {
     notFound();
