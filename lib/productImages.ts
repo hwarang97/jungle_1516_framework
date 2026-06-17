@@ -1,4 +1,4 @@
-const fallbackProductImageSrc = "/window.svg";
+export const fallbackProductImageSrc = "/window.svg";
 const allowedRemoteImageHosts = new Set(["img.danuri.io"]);
 
 export function isSupportedProductImageUrl(imageUrl: string) {

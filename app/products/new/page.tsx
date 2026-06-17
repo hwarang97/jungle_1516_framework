@@ -1,8 +1,16 @@
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
 import ProductForm from "../ProductForm";
 import { createProduct } from "../actions";
 import styles from "./page.module.css";
 
-export default function ProductNewPage() {
+export default async function ProductNewPage() {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    redirect("/login?next=/products/new");
+  }
+
   return (
     <main className={styles.page}>
       <section className={styles.header}>

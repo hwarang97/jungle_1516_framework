@@ -91,7 +91,7 @@ export default function ProductForm({
             <input
               name="imageUrl"
               type="url"
-              required
+              placeholder="비워두면 기본 이미지 사용"
               defaultValue={initialValues?.imageUrl ?? ""}
             />
           </label>
@@ -177,7 +177,7 @@ export default function ProductForm({
           <input
             name="productUrl"
             type="url"
-            required
+            placeholder="비워두면 기본 상품 URL 사용"
             defaultValue={initialValues?.productUrl ?? ""}
           />
         </label>

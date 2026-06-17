@@ -4,7 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { isSupportedProductImageUrl } from "@/lib/productImages";
+import {
+  fallbackProductImageSrc,
+  isSupportedProductImageUrl,
+} from "@/lib/productImages";
+
+const fallbackProductUrl = "https://prod.danawa.com/";
 
 function getText(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -36,14 +41,28 @@ function getRequiredNumber(formData: FormData, key: string, label: string) {
   return value;
 }
 
-function getRequiredImageUrl(formData: FormData) {
-  const imageUrl = getRequiredText(formData, "imageUrl", "Product image URL");
+function getImageUrl(formData: FormData) {
+  const imageUrl = getText(formData, "imageUrl");
 
   if (!isSupportedProductImageUrl(imageUrl)) {
-    throw new Error("Product image URL must be a supported image URL.");
+    return fallbackProductImageSrc;
   }
 
   return imageUrl;
+}
+
+function getProductUrl(formData: FormData) {
+  const productUrl = getText(formData, "productUrl");
+
+  if (!productUrl) {
+    return fallbackProductUrl;
+  }
+
+  try {
+    return new URL(productUrl).toString();
+  } catch {
+    return fallbackProductUrl;
+  }
 }
 
 function getCreateProductCode(formData: FormData) {
@@ -78,8 +97,8 @@ function getProductFormData(formData: FormData, pcode: string) {
       name,
       brand,
       priceKrw: Math.trunc(getRequiredNumber(formData, "priceKrw", "Price")),
-      imageUrl: getRequiredImageUrl(formData),
-      productUrl: getRequiredText(formData, "productUrl", "Original product URL"),
+      imageUrl: getImageUrl(formData),
+      productUrl: getProductUrl(formData),
       cpu: getRequiredText(formData, "cpu", "CPU"),
       gpu: getRequiredText(formData, "gpu", "GPU"),
       ramGb: Math.trunc(getRequiredNumber(formData, "ramGb", "RAM")),
@@ -110,12 +129,23 @@ function getTagCreateData(tags: string[]) {
 }
 
 export async function createProduct(formData: FormData) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    redirect("/login?next=/products/new");
+  }
+
   const pcode = getCreateProductCode(formData);
   const { product, tags } = getProductFormData(formData, pcode);
 
   await prisma.product.create({
     data: {
       ...product,
+      creator: {
+        connect: {
+          id: currentUser.id,
+        },
+      },
       productTags: {
         create: getTagCreateData(tags),
       },

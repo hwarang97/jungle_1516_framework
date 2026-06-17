@@ -70,19 +70,40 @@ a {
   gap: 8px;
 }
 
-.site-nav a {
+.site-nav form {
+  margin: 0;
+}
+
+.site-nav a,
+.site-nav-button,
+.site-user {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 36px;
   padding: 0 10px;
   border-radius: 6px;
-  color: #475569;
   font-size: 14px;
   font-weight: 800;
 }
 
-.site-nav a:hover {
+.site-nav a,
+.site-nav-button {
+  color: #475569;
+}
+
+.site-user {
+  color: #111827;
+}
+
+.site-nav-button {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.site-nav a:hover,
+.site-nav-button:hover {
   background: #f1f5f9;
   color: #111827;
 }
