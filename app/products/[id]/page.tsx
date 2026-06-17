@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
 import { getProductByPcode } from "@/lib/products";
 import { getProductCommentsByPcode } from "@/lib/comments";
 import { getProductImageSrc } from "@/lib/productImages";
@@ -41,7 +42,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const comments = await getProductCommentsByPcode(product.pcode);
+  const [comments, currentUser] = await Promise.all([
+    getProductCommentsByPcode(product.pcode),
+    getCurrentUser(),
+  ]);
   const deleteProductAction = deleteProduct.bind(null, product.pcode);
   const createCommentAction = createComment.bind(null, product.pcode);
 
@@ -157,7 +161,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
         </aside>
       </section>
 
-      <CommentSection comments={comments} createAction={createCommentAction} />
+      <CommentSection
+        comments={comments}
+        createAction={createCommentAction}
+        currentUserName={currentUser?.name ?? null}
+      />
     </main>
   );
 }

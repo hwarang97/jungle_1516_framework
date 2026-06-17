@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isSupportedProductImageUrl } from "@/lib/productImages";
 
@@ -162,11 +163,22 @@ export async function deleteProduct(pcode: string) {
 }
 
 export async function createComment(productPcode: string, formData: FormData) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    redirect(`/login?next=/products/${productPcode}`);
+  }
+
   const content = getRequiredText(formData, "content", "Comment");
 
   await prisma.comment.create({
     data: {
       content,
+      author: {
+        connect: {
+          id: currentUser.id,
+        },
+      },
       product: {
         connect: {
           pcode: productPcode,

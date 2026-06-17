@@ -1,17 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import type { SubmitEvent } from "react";
+import { useActionState } from "react";
+import { signup, type SignupState } from "./actions";
 import styles from "../auth.module.css";
 
-export default function SignupPage() {
-  const router = useRouter();
+const initialState: SignupState = {
+  error: null,
+  fields: {
+    name: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+  },
+  formKey: 0,
+};
 
-  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-    router.push("/login");
-  }
+export default function SignupPage() {
+  const [state, formAction, isPending] = useActionState(signup, initialState);
 
   return (
     <main className={styles.page}>
@@ -22,29 +28,49 @@ export default function SignupPage() {
           <p>노트북 상품 관리와 의견 작성을 위한 계정을 만듭니다.</p>
         </div>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} action={formAction} key={state.formKey}>
           <label className={styles.field}>
             이름
-            <input name="name" required placeholder="홍길동" />
+            <input name="name" required placeholder="홍길동" defaultValue={state.fields.name} />
           </label>
 
           <label className={styles.field}>
             이메일
-            <input name="email" type="email" required placeholder="name@example.com" />
+            <input
+              name="email"
+              type="email"
+              required
+              placeholder="name@example.com"
+              defaultValue={state.fields.email}
+            />
           </label>
 
           <label className={styles.field}>
             비밀번호
-            <input name="password" type="password" required placeholder="비밀번호" />
+            <input
+              name="password"
+              type="password"
+              required
+              placeholder="비밀번호"
+              defaultValue={state.fields.password}
+            />
           </label>
 
           <label className={styles.field}>
             비밀번호 확인
-            <input name="passwordConfirm" type="password" required placeholder="비밀번호 확인" />
+            <input
+              name="passwordConfirm"
+              type="password"
+              required
+              placeholder="비밀번호 확인"
+              defaultValue={state.fields.passwordConfirm}
+            />
           </label>
 
-          <button className={styles.primaryButton} type="submit">
-            회원가입
+          {state.error ? <p className={styles.errorMessage}>{state.error}</p> : null}
+
+          <button className={styles.primaryButton} type="submit" disabled={isPending}>
+            {isPending ? "가입 중" : "회원가입"}
           </button>
         </form>
 
