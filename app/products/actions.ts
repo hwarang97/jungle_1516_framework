@@ -128,6 +128,32 @@ function getTagCreateData(tags: string[]) {
   }));
 }
 
+async function getProductManageAccess(pcode: string) {
+  const currentUser = await getCurrentUser();
+  const product = await prisma.product.findUnique({
+    where: {
+      pcode,
+    },
+    select: {
+      creatorId: true,
+    },
+  });
+
+  if (!product) {
+    return "missing";
+  }
+
+  if (product.creatorId === null) {
+    return "allowed";
+  }
+
+  if (!currentUser) {
+    return "login";
+  }
+
+  return currentUser.id === product.creatorId ? "allowed" : "denied";
+}
+
 export async function createProduct(formData: FormData) {
   const currentUser = await getCurrentUser();
 
@@ -158,6 +184,16 @@ export async function createProduct(formData: FormData) {
 }
 
 export async function updateProduct(currentPcode: string, formData: FormData) {
+  const access = await getProductManageAccess(currentPcode);
+
+  if (access === "login") {
+    redirect(`/login?next=/products/${currentPcode}/edit`);
+  }
+
+  if (access !== "allowed") {
+    redirect(`/products/${currentPcode}`);
+  }
+
   const nextPcode = getText(formData, "pcode") || currentPcode;
   const { product, tags } = getProductFormData(formData, nextPcode);
 
@@ -181,6 +217,16 @@ export async function updateProduct(currentPcode: string, formData: FormData) {
 }
 
 export async function deleteProduct(pcode: string) {
+  const access = await getProductManageAccess(pcode);
+
+  if (access === "login") {
+    redirect(`/login?next=/products/${pcode}`);
+  }
+
+  if (access !== "allowed") {
+    redirect(`/products/${pcode}`);
+  }
+
   await prisma.product.deleteMany({
     where: {
       pcode,

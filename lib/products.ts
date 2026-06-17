@@ -3,6 +3,11 @@ import { prisma } from "@/lib/prisma";
 
 type ProductWithTags = Product & {
   productTags: Array<ProductTag & { tag: Tag }>;
+  creator: {
+    id: number;
+    name: string;
+    email: string;
+  } | null;
 };
 
 export type ProductListItem = {
@@ -33,6 +38,9 @@ export type ProductListItem = {
   description: string;
   rawSpec: string;
   collectedAt: string | null;
+  creatorId: number | null;
+  creatorName: string | null;
+  creatorEmail: string | null;
 };
 
 function mapProduct(product: ProductWithTags): ProductListItem {
@@ -64,12 +72,22 @@ function mapProduct(product: ProductWithTags): ProductListItem {
     description: product.description,
     rawSpec: product.rawSpec,
     collectedAt: product.collectedAt,
+    creatorId: product.creatorId,
+    creatorName: product.creator?.name ?? null,
+    creatorEmail: product.creator?.email ?? null,
   };
 }
 
 export async function getProducts() {
   const products = await prisma.product.findMany({
     include: {
+      creator: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
       productTags: {
         include: {
           tag: true,
@@ -90,6 +108,13 @@ export async function getProductByPcode(pcode: string) {
       pcode,
     },
     include: {
+      creator: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
       productTags: {
         include: {
           tag: true,

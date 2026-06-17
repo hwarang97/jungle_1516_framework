@@ -1,6 +1,7 @@
-import { notFound } from "next/navigation";
-import ProductForm, { ProductFormValues } from "../../ProductForm";
+import { notFound, redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
 import { getProductByPcode } from "@/lib/products";
+import ProductForm, { ProductFormValues } from "../../ProductForm";
 import { updateProduct } from "../../actions";
 import styles from "./page.module.css";
 
@@ -16,6 +17,14 @@ export default async function ProductEditPage({ params }: PageProps) {
 
   if (!product) {
     notFound();
+  }
+
+  const currentUser = await getCurrentUser();
+  const canManageProduct =
+    product.creatorId === null || currentUser?.id === product.creatorId;
+
+  if (!canManageProduct) {
+    redirect(`/products/${product.pcode}`);
   }
 
   const initialValues: ProductFormValues = {
