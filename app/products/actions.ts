@@ -160,3 +160,20 @@ export async function deleteProduct(pcode: string) {
   revalidatePath(`/products/${pcode}`);
   redirect("/products");
 }
+
+export async function createComment(productPcode: string, formData: FormData) {
+  const content = getRequiredText(formData, "content", "Comment");
+
+  await prisma.comment.create({
+    data: {
+      content,
+      product: {
+        connect: {
+          pcode: productPcode,
+        },
+      },
+    },
+  });
+
+  revalidatePath(`/products/${productPcode}`);
+}

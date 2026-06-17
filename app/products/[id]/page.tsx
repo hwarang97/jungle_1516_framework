@@ -2,8 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProductByPcode } from "@/lib/products";
+import { getProductCommentsByPcode } from "@/lib/comments";
 import { getProductImageSrc } from "@/lib/productImages";
-import { deleteProduct } from "../actions";
+import { createComment, deleteProduct } from "../actions";
 import CommentSection from "./CommentSection";
 import DeleteProductButton from "./DeleteProductButton";
 import styles from "./page.module.css";
@@ -40,7 +41,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  const comments = await getProductCommentsByPcode(product.pcode);
   const deleteProductAction = deleteProduct.bind(null, product.pcode);
+  const createCommentAction = createComment.bind(null, product.pcode);
 
   const specs = [
     { label: "CPU", value: product.cpu },
@@ -154,7 +157,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
         </aside>
       </section>
 
-      <CommentSection />
+      <CommentSection comments={comments} createAction={createCommentAction} />
     </main>
   );
 }
