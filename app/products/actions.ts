@@ -148,3 +148,15 @@ export async function updateProduct(currentPcode: string, formData: FormData) {
   revalidatePath(`/products/${nextPcode}`);
   redirect(`/products/${nextPcode}`);
 }
+
+export async function deleteProduct(pcode: string) {
+  await prisma.product.deleteMany({
+    where: {
+      pcode,
+    },
+  });
+
+  revalidatePath("/products");
+  revalidatePath(`/products/${pcode}`);
+  redirect("/products");
+}

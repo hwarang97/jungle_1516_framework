@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProductByPcode } from "@/lib/products";
 import { getProductImageSrc } from "@/lib/productImages";
+import { deleteProduct } from "../actions";
 import CommentSection from "./CommentSection";
 import DeleteProductButton from "./DeleteProductButton";
 import styles from "./page.module.css";
@@ -38,6 +39,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
   if (!product) {
     notFound();
   }
+
+  const deleteProductAction = deleteProduct.bind(null, product.pcode);
 
   const specs = [
     { label: "CPU", value: product.cpu },
@@ -95,7 +98,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
             <Link className={styles.secondaryActionLink} href={`/products/${product.pcode}/edit`}>
               수정
             </Link>
-            <DeleteProductButton productName={product.name} />
+            <DeleteProductButton
+              productName={product.name}
+              deleteAction={deleteProductAction}
+            />
           </div>
         </div>
       </section>
