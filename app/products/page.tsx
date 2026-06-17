@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getProducts, type ProductListItem } from "@/lib/products";
+import { getProductImageSrc } from "@/lib/productImages";
 import styles from "./page.module.css";
 
 const numberFormat = new Intl.NumberFormat("ko-KR");
@@ -131,7 +132,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                       <div className={styles.productCell}>
                         <Image
                           className={styles.productImage}
-                          src={product.imageUrl}
+                          src={getProductImageSrc(product.imageUrl)}
                           alt={`${product.name} 대표 이미지`}
                           width={58}
                           height={58}

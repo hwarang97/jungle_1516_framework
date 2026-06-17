@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProductByPcode } from "@/lib/products";
+import { getProductImageSrc } from "@/lib/productImages";
 import CommentSection from "./CommentSection";
 import DeleteProductButton from "./DeleteProductButton";
 import styles from "./page.module.css";
@@ -73,7 +74,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div className={styles.imagePanel}>
           <Image
             className={styles.productImage}
-            src={product.imageUrl}
+            src={getProductImageSrc(product.imageUrl)}
             alt={`${product.name} 대표 이미지`}
             width={220}
             height={220}

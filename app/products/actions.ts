@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { isSupportedProductImageUrl } from "@/lib/productImages";
 
 function getText(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -32,6 +33,16 @@ function getRequiredNumber(formData: FormData, key: string, label: string) {
   }
 
   return value;
+}
+
+function getRequiredImageUrl(formData: FormData) {
+  const imageUrl = getRequiredText(formData, "imageUrl", "Product image URL");
+
+  if (!isSupportedProductImageUrl(imageUrl)) {
+    throw new Error("Product image URL must be a supported image URL.");
+  }
+
+  return imageUrl;
 }
 
 function getCreateProductCode(formData: FormData) {
@@ -66,7 +77,7 @@ function getProductFormData(formData: FormData, pcode: string) {
       name,
       brand,
       priceKrw: Math.trunc(getRequiredNumber(formData, "priceKrw", "Price")),
-      imageUrl: getRequiredText(formData, "imageUrl", "Product image URL"),
+      imageUrl: getRequiredImageUrl(formData),
       productUrl: getRequiredText(formData, "productUrl", "Original product URL"),
       cpu: getRequiredText(formData, "cpu", "CPU"),
       gpu: getRequiredText(formData, "gpu", "GPU"),
