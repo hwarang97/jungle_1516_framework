@@ -1,28 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import productsData from "@/data/products.json";
+import { getProducts, type ProductListItem } from "@/lib/products";
+import { getProductImageSrc } from "@/lib/productImages";
 import styles from "./page.module.css";
-
-type Product = {
-  pcode: string;
-  name: string;
-  brand: string;
-  priceKrw: number;
-  imageUrl: string;
-  cpu: string;
-  gpu: string;
-  ramGb: number;
-  storageGb: number;
-  displayInch: number;
-  weightKg: number;
-  os: string;
-  useCases: string[];
-  tags: string[];
-  description: string;
-  rawSpec: string;
-};
-
-const products: Product[] = productsData;
 
 const numberFormat = new Intl.NumberFormat("ko-KR");
 
@@ -30,7 +10,7 @@ function getSearchKeywords(query: string) {
   return query.trim().toLowerCase().split(/\s+/).filter(Boolean);
 }
 
-function createSearchText(product: Product) {
+function createSearchText(product: ProductListItem) {
   return [
     product.name,
     product.brand,
@@ -46,7 +26,7 @@ function createSearchText(product: Product) {
     .toLowerCase();
 }
 
-function filterProducts(query: string) {
+function filterProducts(products: ProductListItem[], query: string) {
   const keywords = getSearchKeywords(query);
 
   if (keywords.length === 0) {
@@ -69,7 +49,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const { q } = await searchParams;
   const searchQuery = q ?? "";
   const searchKeywords = getSearchKeywords(searchQuery);
-  const visibleProducts = filterProducts(searchQuery);
+  const products = await getProducts();
+  const visibleProducts = filterProducts(products, searchQuery);
 
   return (
     <main className={styles.page}>
@@ -147,17 +128,20 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               <tbody>
                 {visibleProducts.map((product) => (
                   <tr key={product.pcode}>
-                  <td>
+                    <td>
                       <div className={styles.productCell}>
                         <Image
                           className={styles.productImage}
-                          src={product.imageUrl}
+                          src={getProductImageSrc(product.imageUrl)}
                           alt={`${product.name} 대표 이미지`}
                           width={58}
                           height={58}
                         />
                         <div>
-                          <Link className={styles.productName} href={`/products/${product.pcode}`}>
+                          <Link
+                            className={styles.productName}
+                            href={`/products/${product.pcode}`}
+                          >
                             {product.name}
                           </Link>
                           <p className={styles.brand}>{product.brand}</p>

@@ -86,6 +86,12 @@
   font-size: 25px;
 }
 
+.creatorInfo {
+  color: #475569;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .detailActions {
   display: grid;
   gap: 8px;
@@ -302,6 +308,39 @@
   cursor: pointer;
 }
 
+.loginRequired {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.loginRequired p {
+  color: #475569;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.loginRequired a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid #111827;
+  border-radius: 6px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .commentList {
   display: grid;
   gap: 10px;
@@ -359,6 +398,15 @@
   }
 
   .commentForm button {
+    width: 100%;
+  }
+
+  .loginRequired {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .loginRequired a {
     width: 100%;
   }
 }

@@ -1,28 +1,30 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import type { SubmitEvent } from "react";
 import styles from "./page.module.css";
 
 type DeleteProductButtonProps = {
   productName: string;
+  deleteAction: () => void | Promise<void>;
 };
 
-export default function DeleteProductButton({ productName }: DeleteProductButtonProps) {
-  const router = useRouter();
+export default function DeleteProductButton({
+  productName,
+  deleteAction,
+}: DeleteProductButtonProps) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+    const confirmed = window.confirm(`${productName} 상품을 삭제할까요?`);
 
-  function handleDelete() {
-    const confirmed = window.confirm(
-      `${productName} 상품 삭제 흐름을 확인합니다. 현재는 DB 연결 전이라 실제 데이터는 삭제되지 않습니다.`,
-    );
-
-    if (confirmed) {
-      router.push("/products");
+    if (!confirmed) {
+      event.preventDefault();
     }
   }
 
   return (
-    <button className={styles.dangerButton} type="button" onClick={handleDelete}>
-      삭제
-    </button>
+    <form action={deleteAction} onSubmit={handleSubmit}>
+      <button className={styles.dangerButton} type="submit">
+        삭제
+      </button>
+    </form>
   );
 }

@@ -1,25 +1,9 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
+import { getProductByPcode } from "@/lib/products";
 import ProductForm, { ProductFormValues } from "../../ProductForm";
-import productsData from "@/data/products.json";
+import { updateProduct } from "../../actions";
 import styles from "./page.module.css";
-
-type Product = {
-  pcode: string;
-  name: string;
-  brand: string;
-  priceKrw: number;
-  productUrl: string;
-  cpu: string;
-  gpu: string;
-  ramGb: number;
-  storageGb: number;
-  displayInch: number;
-  weightKg: number;
-  os: string;
-  tags: string[];
-  description: string;
-  rawSpec: string;
-};
 
 type PageProps = {
   params: Promise<{
@@ -27,20 +11,27 @@ type PageProps = {
   }>;
 };
 
-const products: Product[] = productsData;
-
 export default async function ProductEditPage({ params }: PageProps) {
   const { id } = await params;
-  const product = products.find((item) => item.pcode === id);
+  const product = await getProductByPcode(id);
 
   if (!product) {
     notFound();
+  }
+
+  const currentUser = await getCurrentUser();
+  const canManageProduct =
+    product.creatorId === null || currentUser?.id === product.creatorId;
+
+  if (!canManageProduct) {
+    redirect(`/products/${product.pcode}`);
   }
 
   const initialValues: ProductFormValues = {
     ...product,
     tags: product.tags.join(", "),
   };
+  const updateProductAction = updateProduct.bind(null, product.pcode);
 
   return (
     <main className={styles.page}>
@@ -53,6 +44,7 @@ export default async function ProductEditPage({ params }: PageProps) {
       <ProductForm
         mode="edit"
         initialValues={initialValues}
+        submitAction={updateProductAction}
         redirectHref={`/products/${product.pcode}`}
         cancelHref={`/products/${product.pcode}`}
       />

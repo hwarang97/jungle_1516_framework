@@ -1,40 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import productsData from "@/data/products.json";
+import { getCurrentUser } from "@/lib/auth";
+import { getProductCommentsByPcode } from "@/lib/comments";
+import { getProductImageSrc } from "@/lib/productImages";
+import { getProductByPcode } from "@/lib/products";
+import { createComment, deleteProduct } from "../actions";
 import CommentSection from "./CommentSection";
 import DeleteProductButton from "./DeleteProductButton";
 import styles from "./page.module.css";
-
-type Product = {
-  pcode: string;
-  name: string;
-  brand: string;
-  priceKrw: number;
-  imageUrl: string;
-  productUrl: string;
-  cpu: string;
-  gpu: string;
-  npuTops: number | null;
-  ramGb: number;
-  ramUpgradeable: boolean;
-  storageGb: number;
-  storageSlotCount: number | null;
-  displayInch: number;
-  displayResolution: string;
-  displayRefreshHz: number | null;
-  displayBrightnessNit: number | null;
-  weightKg: number;
-  os: string;
-  batteryWh: number | null;
-  batteryMaxHours: number | null;
-  power: string;
-  useCases: string[];
-  tags: string[];
-  description: string;
-  rawSpec: string;
-  collectedAt: string;
-};
 
 type PageProps = {
   params: Promise<{
@@ -42,15 +16,18 @@ type PageProps = {
   }>;
 };
 
-const products: Product[] = productsData;
 const numberFormat = new Intl.NumberFormat("ko-KR");
 
-function formatBoolean(value: boolean) {
+function formatBoolean(value: boolean | null) {
+  if (value === null) {
+    return "-";
+  }
+
   return value ? "가능" : "불가능";
 }
 
-function formatEmpty(value: string | number | null) {
-  if (value === null || value === "") {
+function formatEmpty(value: string | number | null | undefined) {
+  if (value === null || value === undefined || value === "") {
     return "-";
   }
 
@@ -58,12 +35,21 @@ function formatEmpty(value: string | number | null) {
 }
 
 export default async function ProductDetailPage({ params }: PageProps) {
-  const { id } = await params; // 요청 URL에 의존하는 변수임을 명시 (정적 페이지로 만들기 어렵다는 뜻, 캐싱 힘듬)
-  const product = products.find((item) => item.pcode === id);
+  const { id } = await params;
+  const product = await getProductByPcode(id);
 
   if (!product) {
     notFound();
   }
+
+  const [comments, currentUser] = await Promise.all([
+    getProductCommentsByPcode(product.pcode),
+    getCurrentUser(),
+  ]);
+  const canManageProduct =
+    product.creatorId === null || currentUser?.id === product.creatorId;
+  const deleteProductAction = deleteProduct.bind(null, product.pcode);
+  const createCommentAction = createComment.bind(null, product.pcode);
 
   const specs = [
     { label: "CPU", value: product.cpu },
@@ -72,7 +58,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
     { label: "RAM", value: `${product.ramGb}GB` },
     { label: "RAM 교체", value: formatBoolean(product.ramUpgradeable) },
     { label: "저장공간", value: `${product.storageGb}GB` },
-    { label: "저장 슬롯", value: product.storageSlotCount ? `${product.storageSlotCount}개` : "-" },
+    {
+      label: "저장 슬롯",
+      value: product.storageSlotCount ? `${product.storageSlotCount}개` : "-",
+    },
     { label: "화면 크기", value: `${product.displayInch}인치` },
     { label: "해상도", value: product.displayResolution },
     { label: "주사율", value: product.displayRefreshHz ? `${product.displayRefreshHz}Hz` : "-" },
@@ -100,7 +89,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div className={styles.imagePanel}>
           <Image
             className={styles.productImage}
-            src={product.imageUrl}
+            src={getProductImageSrc(product.imageUrl)}
             alt={`${product.name} 대표 이미지`}
             width={220}
             height={220}
@@ -114,14 +103,24 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div className={styles.priceBox}>
           <span>현재 기준 가격</span>
           <strong>{numberFormat.format(product.priceKrw)}원</strong>
+          <p className={styles.creatorInfo}>
+            등록자: {product.creatorName ?? "시드 데이터"}
+          </p>
           <div className={styles.detailActions}>
             <a className={styles.actionLink} href={product.productUrl} target="_blank" rel="noreferrer">
               원본 상품 페이지
             </a>
-            <Link className={styles.secondaryActionLink} href={`/products/${product.pcode}/edit`}>
-              수정
-            </Link>
-            <DeleteProductButton productName={product.name} />
+            {canManageProduct ? (
+              <>
+                <Link className={styles.secondaryActionLink} href={`/products/${product.pcode}/edit`}>
+                  수정
+                </Link>
+                <DeleteProductButton
+                  productName={product.name}
+                  deleteAction={deleteProductAction}
+                />
+              </>
+            ) : null}
           </div>
         </div>
       </section>
@@ -129,7 +128,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <section className={styles.summaryGrid} aria-label="핵심 요약">
         <div>
           <span>용도</span>
-          <strong>{product.useCases.join(", ")}</strong>
+          <strong>{product.useCases.join(", ") || "-"}</strong>
         </div>
         <div>
           <span>CPU / GPU</span>
@@ -174,7 +173,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
         </aside>
       </section>
 
-      <CommentSection />
+      <CommentSection
+        comments={comments}
+        createAction={createCommentAction}
+        currentUserName={currentUser?.name ?? null}
+      />
     </main>
   );
 }
